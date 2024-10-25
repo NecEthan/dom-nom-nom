@@ -30,18 +30,30 @@ const createFoodCard = (foodObject) => {
 
 const randomFood = document.querySelector(".random-food");
 
-randomFood.appendChild(createFoodCard(foodStock[0]));
+randomFood.appendChild(createFoodCard(foodStock[2]));
 
 // 1. DISPLAY RANDOM CARD
 // TODO: WHEN A USER CLICKS ON THE NEXT BUTTON
 // - THE DISPLAYED CARD WILL BE REMOVED.
 // - A NEW RANDOM FOOD CARD SHOULD BE DISPLAYED.
+const next = document.querySelector(".next");
+
+next.addEventListener("click", () => {
+  const randomIndex = Math.floor(Math.random() * foodStock.length);
+  randomFood.innerHTML = "";
+  randomFood.appendChild(createFoodCard(foodStock[randomIndex]));
+});
 
 // 2. DISPLAY ALL
 // TODO: THE view-all-food ELEMENT IS EMPTY
 // - HOW CAN YOU REMOVE THE ...?
 // - HOW CAN YOU ITERATE THROUGH THE foodStock ARRAY AND CREATE A CARD FOR EACH?
 // - HOW CAN YOU ADD THEM TO THE HTML ELEMENT?
+const viewAll = document.querySelector(".view-all-food");
+viewAll.innerHTML = "";
+foodStock.forEach((food) => {
+  viewAll.appendChild(createFoodCard(food));
+});
 
 // 3. THE EVENT
 // THE CODE BELOW
@@ -61,6 +73,12 @@ titles.forEach((title) => {
 // TODO:
 // - WHEN THE MOUSE LEAVES AN ELEMENT WITH A CLASS OF title, CHANGE THE TEXT TO A DIFFERENT COLOR
 
+titles.forEach((title) => {
+  title.addEventListener("mouseleave", (event) => {
+    event.target.style.color = "purple";
+  });
+});
+
 // 4. ADD FOOD & USE THE EVENT
 // TODO: WHEN A FORM IS SUBMITTED, GET THE VALUES, CREATE A FOOD OBJECT, UPDATE THE foodStock, AND DISPLAY
 const form = document.querySelector(".food-form");
@@ -71,12 +89,14 @@ form.addEventListener("submit", (event) => {
   console.log(event);
 
   // - HOW DO YOU GET A INPUT VALUE(S) FROM A FORM EVENT?
-
+  const formData = new FormData(event.target);
   const foodObject = {};
   // - HOW DO YOU ADD THE VALUES TO THE foodObject?
-  foodObject.name = "";
-  foodObject.price = "";
-  foodObject.img = "";
-
+  foodObject.img = formData.get("emoji");
+  foodObject.name = formData.get("name");
+  foodObject.foodType = formData.get("healthy") ? "healthy" : "junk";
+  foodObject.price = formData.get("price");
+  foodStock.push(foodObject);
   // HOW CAN YOU UPDATE THE view-all-food CONTAINER TO HAVE THE NEW foodObject?
+  viewAll.appendChild(createFoodCard(foodObject));
 });
