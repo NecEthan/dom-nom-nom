@@ -37,11 +37,48 @@ randomFood.appendChild(createFoodCard(foodStock[0]));
 // - THE DISPLAYED CARD WILL BE REMOVED.
 // - A NEW RANDOM FOOD CARD SHOULD BE DISPLAYED.
 
+const nextBtn = document.getElementById('next-btn')
+
+nextBtn.addEventListener('click', () => {
+  const card = document.querySelector(".card");
+
+  const randomNum = Math.floor(Math.random() * 8) + 1;
+  card.remove();
+  randomFood.appendChild(createFoodCard(foodStock[randomNum]));
+
+})
+
 // 2. DISPLAY ALL
 // TODO: THE view-all-food ELEMENT IS EMPTY
 // - HOW CAN YOU REMOVE THE ...?
 // - HOW CAN YOU ITERATE THROUGH THE foodStock ARRAY AND CREATE A CARD FOR EACH?
 // - HOW CAN YOU ADD THEM TO THE HTML ELEMENT?
+const viewBtn = document.querySelector('#view-btn');
+const viewFood = document.querySelector('.view-all-food');
+
+viewBtn.addEventListener('click', () => {
+  foodStock.forEach((item) => {
+    const card = document.createElement('div');
+    card.classList.add('card');
+
+    const name = document.createElement('p');
+    name.textContent = item.name;
+
+    const foodType = document.createElement('p');
+    foodType.textContent = `Type: ${item.foodType}`;
+
+    const price = document.createElement('p');
+    price.textContent = `Price: $${item.price.toFixed(2)}`;
+
+    card.appendChild(name);
+    card.appendChild(foodType);
+    card.appendChild(price);
+
+    viewFood.appendChild(card);
+  });
+});
+
+
 
 // 3. THE EVENT
 // THE CODE BELOW
@@ -49,12 +86,14 @@ randomFood.appendChild(createFoodCard(foodStock[0]));
 // - IT SETS AN EVENT LISTENER ON EACH ELEMENT
 // - HAVE A LOOK AT THE event IN THE CONSOLE WHEN YOU HOVER OVER A TITLE
 const titles = document.querySelectorAll(".title");
+const colors = ['pink', 'red', 'yellow', 'green', 'blue', 'purple']
 
 titles.forEach((title) => {
   title.addEventListener("mouseover", (event) => {
     console.dir(event);
     console.log(event.target);
-    event.target.style.color = "orange";
+    const randomNum = Math.floor(Math.random() * 6) + 1;
+    event.target.style.color = `${colors[randomNum]}`;
   });
 });
 
@@ -71,12 +110,18 @@ form.addEventListener("submit", (event) => {
   console.log(event);
 
   // - HOW DO YOU GET A INPUT VALUE(S) FROM A FORM EVENT?
+  console.log(event.target.emoji.value)
+  const emoji = event.target.emoji.value;
+  const fname = event.target.name.value;
+  const price = event.target.price.value;
 
   const foodObject = {};
   // - HOW DO YOU ADD THE VALUES TO THE foodObject?
-  foodObject.name = "";
-  foodObject.price = "";
-  foodObject.img = "";
-
+  foodObject.name = fname;
+  foodObject.price = price;
+  foodObject.img = emoji;
   // HOW CAN YOU UPDATE THE view-all-food CONTAINER TO HAVE THE NEW foodObject?
+  foodStock.push(foodObject)
+  console.log(foodStock)
+  form.reset();
 });
